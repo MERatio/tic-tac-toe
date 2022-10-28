@@ -1,17 +1,18 @@
 'use strict';
 
-function Player(marker) {
+function Player(playerNumber, marker) {
 	return {
+		playerNumber,
 		marker,
 	};
 }
 
 const display = (() => {
-	const _xPlayerNameAndScoreContainer = document.querySelector(
-		'.js-xPlayer-name-and-score-container'
+	const _player1NameAndScoreContainer = document.querySelector(
+		'.js-player1-name-and-score-container'
 	);
-	const _oPlayerNameAndScoreContainer = document.querySelector(
-		'.js-oPlayer-name-and-score-container'
+	const _player2NameAndScoreContainer = document.querySelector(
+		'.js-player2-name-and-score-container'
 	);
 	const _activeMarker = document.querySelector('.js-active-marker');
 	const _domSquares = document.querySelector('.js-squares');
@@ -24,12 +25,18 @@ const display = (() => {
 		game.updateSquare(index);
 	}
 
+	function _getDomSquareClassList(square) {
+		let classes = 'square';
+		if (square) {
+			const playerNumber = game.getPlayerNumberBasedOnMarker(square);
+			classes += ` player${playerNumber}-marker`;
+		}
+		return classes;
+	}
+
 	function _getDomSquare(square, index) {
 		const domSquare = document.createElement('button');
-		domSquare.classList.add('square');
-		if (square) {
-			domSquare.classList.add(square);
-		}
+		domSquare.classList = _getDomSquareClassList(square);
 		domSquare.textContent = square;
 		domSquare.dataset.index = index;
 		domSquare.addEventListener('click', _handleSquareClick);
@@ -37,12 +44,12 @@ const display = (() => {
 	}
 
 	function changeActivePlayer(activePlayer) {
-		if (activePlayer.marker === 'X') {
-			_oPlayerNameAndScoreContainer.classList.remove('active');
-			_xPlayerNameAndScoreContainer.classList.add('active');
+		if (activePlayer.playerNumber === 1) {
+			_player2NameAndScoreContainer.classList.remove('active');
+			_player1NameAndScoreContainer.classList.add('active');
 		} else {
-			_xPlayerNameAndScoreContainer.classList.remove('active');
-			_oPlayerNameAndScoreContainer.classList.add('active');
+			_player1NameAndScoreContainer.classList.remove('active');
+			_player2NameAndScoreContainer.classList.add('active');
 		}
 		_activeMarker.textContent = activePlayer.marker;
 	}
@@ -50,7 +57,7 @@ const display = (() => {
 	function updateSquare(index, marker) {
 		const domSquare = _domSquares.children[index];
 		domSquare.textContent = marker;
-		domSquare.classList.add(marker);
+		domSquare.classList = _getDomSquareClassList(marker);
 	}
 
 	function renderSquares(squares) {
@@ -65,17 +72,24 @@ const display = (() => {
 
 const game = (() => {
 	const _squares = Array(9).fill(null);
-	const _xPlayer = Player('X');
-	const _oPlayer = Player('O');
-	let _activePlayer = _xPlayer;
+
+	const _player1 = Player(1, 'X');
+	const _player2 = Player(2, 'O');
+	let _activePlayer = _player1;
 
 	function _changeActivePlayer() {
-		_activePlayer = _activePlayer === _xPlayer ? _oPlayer : _xPlayer;
+		_activePlayer = _activePlayer === _player1 ? _player2 : _player1;
 		display.changeActivePlayer(_activePlayer);
 	}
 
 	function isSquareTaken(index) {
 		return !!_squares[index];
+	}
+
+	function getPlayerNumberBasedOnMarker(marker) {
+		return _player1.marker === marker
+			? _player1.playerNumber
+			: _player2.playerNumber;
 	}
 
 	function updateSquare(index) {
@@ -90,6 +104,7 @@ const game = (() => {
 
 	return {
 		isSquareTaken,
+		getPlayerNumberBasedOnMarker,
 		updateSquare,
 		init,
 	};

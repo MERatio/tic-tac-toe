@@ -128,16 +128,16 @@ body {
 	align-items: center;
 }
 
-.X,
-.O {
+.player1-marker,
+.player2-marker {
 	cursor: auto;
 }
 
-.X {
+.player1-marker {
 	color: var(--neutral-700);
 }
 
-.O {
+.player2-marker {
 	color: #fff;
 }
 
