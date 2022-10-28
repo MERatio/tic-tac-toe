@@ -1,0 +1,23 @@
+html {
+	box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after,
+hr {
+	box-sizing: inherit;
+}
+
+*,
+*:before,
+*:after,
+h1,
+fieldset {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-family: sans-serif;
+}
