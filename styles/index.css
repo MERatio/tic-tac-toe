@@ -1,3 +1,13 @@
+:root {
+	--gray-50: #f9fafb;
+	--gray-200: #e5e7eb;
+	--sky-500: #0ea5e9;
+	--neutral-700: #404040;
+	--neutral-800: #262626;
+	--border-radius: 5px;
+	--box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
 html {
 	box-sizing: border-box;
 }
@@ -19,5 +29,118 @@ fieldset {
 }
 
 body {
-	font-family: sans-serif;
+	font-family: 'Roboto', sans-serif;
+	color: var(--neutral-800);
+	background-color: var(--gray-50);
+}
+
+.fw-700 {
+	font-weight: 700;
+}
+
+.container {
+	display: flex;
+	justify-content: center;
+}
+
+.tic-tac-toe {
+	width: clamp(300px, 60%, 600px);
+	background-color: #fff;
+	border-radius: var(--border-radius);
+	border: 1px solid var(--gray-200);
+	box-shadow: var(--box-shadow);
+
+	margin-top: 2%;
+}
+
+.mode-select-group {
+	padding: 20px;
+}
+
+.mode-select {
+	max-width: max-content;
+	color: var(--neutral-700);
+	padding: 3px;
+	background-color: #fff;
+	border: 1px solid var(--gray-200);
+	border-radius: var(--border-radius);
+	cursor: pointer;
+}
+
+.players-names-and-scores-container {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(max-content, 30%));
+	justify-content: center;
+	column-gap: 10px;
+}
+
+.player-name-and-score-container {
+	padding: 8px 20px;
+	border: 1px solid var(--gray-200);
+	border-radius: var(--border-radius);
+
+	display: flex;
+	justify-content: space-between;
+}
+
+.player-name-and-score-container.active {
+	border-bottom: 2px solid var(--sky-500);
+	box-shadow: var(--box-shadow);
+}
+
+.game-info {
+	text-align: center;
+
+	margin: 10px 0;
+}
+
+.board {
+	background-color: var(--sky-500);
+	padding: 20px 0;
+	margin: 0 -1px;
+
+	display: flex;
+	justify-content: center;
+}
+
+.squares-container {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.squares {
+	width: 300px;
+	height: 300px;
+
+	display: grid;
+	grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+	gap: 6px;
+}
+
+.square {
+	font-size: 3rem;
+	font-weight: 700;
+	background-color: var(--sky-500);
+	cursor: pointer;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.X {
+	color: var(--neutral-700);
+}
+
+.O {
+	color: #fff;
+}
+
+.restart-game-btn {
+	width: 100%;
+	color: var(--sky-500);
+	font-weight: 700;
+	padding: 10px;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
 }

@@ -6,7 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tic Tac Toe</title>
     <link rel="stylesheet" href="styles/normalize.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles/index.css" />
   </head>
-  <body></body>
+  <body>
+    <div class="container">
+      <main class="tic-tac-toe">
+        <div class="mode-select-group">
+          <label for="mode-select">Mode</label>
+          <select id="mode-select" class="mode-select">
+            <option value="vs-player">vs player</option>
+            <option value="vs-computer">vs computer</option>
+          </select>
+        </div>
+        <div class="players-names-and-scores-container">
+          <div class="player-name-and-score-container active">
+            <span>John</span>&nbsp;<span>0</span>
+          </div>
+          <div class="player-name-and-score-container">
+            <span>Foo Bar</span>&nbsp;<span>0</span>
+          </div>
+        </div>
+        <p class="game-info"><span class="fw-700">X</span> turn</p>
+        <div class="board">
+          <div class="squares-container">
+            <div class="squares">
+              <div class="square"><span class="X">X</span></div>
+              <div class="square"></div>
+              <div class="square"><span class="O">O</span></div>
+              <div class="square"></div>
+              <div class="square"></div>
+              <div class="square"></div>
+              <div class="square"><span class="X">X</span></div>
+              <div class="square"></div>
+              <div class="square"><span class="O">O</span></div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="restart-game-btn">Restart game</button>
+      </main>
+    </div>
+  </body>
 </html>
