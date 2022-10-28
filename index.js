@@ -6,37 +6,6 @@ function Player(marker) {
 	};
 }
 
-const game = (() => {
-	const _squares = Array(9).fill(null);
-	const _xPlayer = Player('X');
-	const _oPlayer = Player('O');
-	let _activePlayer = _xPlayer;
-
-	function _changeActivePlayer() {
-		_activePlayer = _activePlayer === _xPlayer ? _oPlayer : _xPlayer;
-	}
-
-	function isSquareTaken(index) {
-		return !!_squares[index];
-	}
-
-	function updateSquare(index) {
-		_squares[index] = _activePlayer.marker;
-		display.updateSquare(index, _activePlayer.marker);
-		_changeActivePlayer();
-	}
-
-	function init() {
-		display.renderSquares(_squares);
-	}
-
-	return {
-		isSquareTaken,
-		updateSquare,
-		init,
-	};
-})();
-
 const display = (() => {
 	const _domSquares = document.querySelector('.js-squares');
 
@@ -74,6 +43,37 @@ const display = (() => {
 	}
 
 	return { updateSquare, renderSquares };
+})();
+
+const game = (() => {
+	const _squares = Array(9).fill(null);
+	const _xPlayer = Player('X');
+	const _oPlayer = Player('O');
+	let _activePlayer = _xPlayer;
+
+	function _changeActivePlayer() {
+		_activePlayer = _activePlayer === _xPlayer ? _oPlayer : _xPlayer;
+	}
+
+	function isSquareTaken(index) {
+		return !!_squares[index];
+	}
+
+	function updateSquare(index) {
+		_squares[index] = _activePlayer.marker;
+		display.updateSquare(index, _activePlayer.marker);
+		_changeActivePlayer();
+	}
+
+	function init() {
+		display.renderSquares(_squares);
+	}
+
+	return {
+		isSquareTaken,
+		updateSquare,
+		init,
+	};
 })();
 
 game.init();
