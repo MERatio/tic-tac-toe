@@ -13,6 +13,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles/index.css" />
+    <script src="index.js" defer></script>
   </head>
   <body>
     <div class="container">
@@ -35,17 +36,7 @@
         <p class="game-info"><span class="fw-700">X</span> turn</p>
         <div class="board">
           <div class="squares-container">
-            <div class="squares">
-              <div class="square"><span class="X">X</span></div>
-              <div class="square"></div>
-              <div class="square"><span class="O">O</span></div>
-              <div class="square"></div>
-              <div class="square"></div>
-              <div class="square"></div>
-              <div class="square"><span class="X">X</span></div>
-              <div class="square"></div>
-              <div class="square"><span class="O">O</span></div>
-            </div>
+            <div class="squares js-squares"></div>
           </div>
         </div>
         <button type="button" class="restart-game-btn">Restart game</button>

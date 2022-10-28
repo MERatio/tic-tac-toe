@@ -120,6 +120,7 @@ body {
 	font-size: 3rem;
 	font-weight: 700;
 	background-color: var(--sky-500);
+	border: none;
 	cursor: pointer;
 
 	display: flex;
