@@ -7,6 +7,13 @@ function Player(marker) {
 }
 
 const display = (() => {
+	const _xPlayerNameAndScoreContainer = document.querySelector(
+		'.js-xPlayer-name-and-score-container'
+	);
+	const _oPlayerNameAndScoreContainer = document.querySelector(
+		'.js-oPlayer-name-and-score-container'
+	);
+	const _activeMarker = document.querySelector('.js-active-marker');
 	const _domSquares = document.querySelector('.js-squares');
 
 	function _handleSquareClick(event) {
@@ -29,6 +36,17 @@ const display = (() => {
 		return domSquare;
 	}
 
+	function changeActivePlayer(activePlayer) {
+		if (activePlayer.marker === 'X') {
+			_oPlayerNameAndScoreContainer.classList.remove('active');
+			_xPlayerNameAndScoreContainer.classList.add('active');
+		} else {
+			_xPlayerNameAndScoreContainer.classList.remove('active');
+			_oPlayerNameAndScoreContainer.classList.add('active');
+		}
+		_activeMarker.textContent = activePlayer.marker;
+	}
+
 	function updateSquare(index, marker) {
 		const domSquare = _domSquares.children[index];
 		domSquare.textContent = marker;
@@ -42,7 +60,7 @@ const display = (() => {
 		}
 	}
 
-	return { updateSquare, renderSquares };
+	return { changeActivePlayer, updateSquare, renderSquares };
 })();
 
 const game = (() => {
@@ -53,6 +71,7 @@ const game = (() => {
 
 	function _changeActivePlayer() {
 		_activePlayer = _activePlayer === _xPlayer ? _oPlayer : _xPlayer;
+		display.changeActivePlayer(_activePlayer);
 	}
 
 	function isSquareTaken(index) {

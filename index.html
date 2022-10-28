@@ -26,14 +26,20 @@
           </select>
         </div>
         <div class="players-names-and-scores-container">
-          <div class="player-name-and-score-container active">
+          <div
+            class="player-name-and-score-container js-xPlayer-name-and-score-container active"
+          >
             <span>John</span>&nbsp;<span>0</span>
           </div>
-          <div class="player-name-and-score-container">
+          <div
+            class="player-name-and-score-container js-oPlayer-name-and-score-container"
+          >
             <span>Foo Bar</span>&nbsp;<span>0</span>
           </div>
         </div>
-        <p class="game-info"><span class="fw-700">X</span> turn</p>
+        <p class="game-info">
+          <span class="fw-700 js-active-marker">X</span> turn
+        </p>
         <div class="board">
           <div class="squares-container">
             <div class="squares js-squares"></div>
