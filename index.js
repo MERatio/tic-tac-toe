@@ -7,7 +7,7 @@ function Player(playerNumber, marker) {
 	};
 }
 
-const display = (() => {
+const dom = (() => {
 	const _player1NameAndScoreContainer = document.querySelector(
 		'.js-player1-name-and-score-container'
 	);
@@ -15,7 +15,7 @@ const display = (() => {
 		'.js-player2-name-and-score-container'
 	);
 	const _activeMarker = document.querySelector('.js-active-marker');
-	const _domSquares = document.querySelector('.js-squares');
+	const _squares = document.querySelector('.js-squares');
 
 	function _handleSquareClick(event) {
 		const index = event.target.dataset.index;
@@ -25,22 +25,22 @@ const display = (() => {
 		game.updateSquare(index);
 	}
 
-	function _getDomSquareClassList(square) {
+	function _getSquareClassList(marker) {
 		let classes = 'square';
-		if (square) {
-			const playerNumber = game.getPlayerNumberBasedOnMarker(square);
+		if (marker) {
+			const playerNumber = game.getPlayerNumberBasedOnMarker(marker);
 			classes += ` player${playerNumber}-marker`;
 		}
 		return classes;
 	}
 
-	function _getDomSquare(square, index) {
-		const domSquare = document.createElement('button');
-		domSquare.classList = _getDomSquareClassList(square);
-		domSquare.textContent = square;
-		domSquare.dataset.index = index;
-		domSquare.addEventListener('click', _handleSquareClick);
-		return domSquare;
+	function _getSquare(marker, index) {
+		const square = document.createElement('button');
+		square.classList = _getSquareClassList(marker);
+		square.textContent = marker;
+		square.dataset.index = index;
+		square.addEventListener('click', _handleSquareClick);
+		return square;
 	}
 
 	function changeActivePlayer(activePlayer) {
@@ -55,15 +55,15 @@ const display = (() => {
 	}
 
 	function updateSquare(index, marker) {
-		const domSquare = _domSquares.children[index];
-		domSquare.textContent = marker;
-		domSquare.classList = _getDomSquareClassList(marker);
+		const square = _squares.children[index];
+		square.textContent = marker;
+		square.classList = _getSquareClassList(marker);
 	}
 
 	function renderSquares(squares) {
 		for (let i = 0; i < squares.length; i++) {
-			const domSquare = _getDomSquare(squares[i], i);
-			_domSquares.appendChild(domSquare);
+			const square = _getSquare(squares[i], i);
+			_squares.appendChild(square);
 		}
 	}
 
@@ -79,7 +79,7 @@ const game = (() => {
 
 	function _changeActivePlayer() {
 		_activePlayer = _activePlayer === _player1 ? _player2 : _player1;
-		display.changeActivePlayer(_activePlayer);
+		dom.changeActivePlayer(_activePlayer);
 	}
 
 	function isSquareTaken(index) {
@@ -94,12 +94,12 @@ const game = (() => {
 
 	function updateSquare(index) {
 		_squares[index] = _activePlayer.marker;
-		display.updateSquare(index, _activePlayer.marker);
+		dom.updateSquare(index, _activePlayer.marker);
 		_changeActivePlayer();
 	}
 
 	function init() {
-		display.renderSquares(_squares);
+		dom.renderSquares(_squares);
 	}
 
 	return {
