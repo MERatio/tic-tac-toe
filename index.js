@@ -73,11 +73,10 @@ const dom = (() => {
 })();
 
 const game = (() => {
-	const _squares = Array(9).fill(null);
-
 	const _player1 = Player(1, 'X');
 	const _player2 = Player(2, 'O');
 	let _activePlayer = _player1;
+	const _squares = Array(9).fill(null);
 
 	function _changeActivePlayer() {
 		_activePlayer = _activePlayer === _player1 ? _player2 : _player1;
