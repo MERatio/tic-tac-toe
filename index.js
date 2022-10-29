@@ -21,7 +21,7 @@ const dom = (() => {
 		'.js-player2-name-and-score-container'
 	);
 	const _gameInfo = document.querySelector('.js-game-info');
-	const _activeMarker = document.querySelector('.js-active-marker');
+	let _activeMarker;
 	const _squares = document.querySelector('.js-squares');
 
 	function _handleSquareClick(event) {
@@ -76,8 +76,19 @@ const dom = (() => {
 		square.classList = _getSquareClassList(marker);
 	}
 
-	function renderGameInfo(text) {
-		_gameInfo.textContent = text;
+	function renderGameInfo(initialContent, text = '') {
+		if (initialContent) {
+			const span = document.createElement('span');
+			span.classList.add('fw-700', 'js-active-marker');
+			_gameInfo.appendChild(span);
+
+			const textNode = document.createTextNode(' turn');
+			_gameInfo.appendChild(textNode);
+
+			_activeMarker = document.querySelector('.js-active-marker');
+		} else {
+			_gameInfo.textContent = text;
+		}
 	}
 
 	function renderScores(player1Score, player2Score) {
@@ -88,6 +99,7 @@ const dom = (() => {
 	function init(player1, player2, activePlayer, squares) {
 		_renderPlayerNames(player1.name, player2.name);
 		renderScores(player1.score, player2.score);
+		renderGameInfo(true);
 		changeActivePlayer(activePlayer);
 		_renderSquares(squares);
 	}
@@ -161,11 +173,11 @@ const game = (() => {
 			case 'yes':
 				_activePlayer.score++;
 				dom.renderScores(_player1.score, _player2.score);
-				dom.renderGameInfo(`${_activePlayer.name} wins!`);
+				dom.renderGameInfo(false, `${_activePlayer.name} wins!`);
 				_gameOver = true;
 				break;
 			case 'tie':
-				dom.renderGameInfo(`It's a tie!`);
+				dom.renderGameInfo(false, `It's a tie!`);
 				_gameOver = true;
 				break;
 			default:
