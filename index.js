@@ -114,11 +114,11 @@ const dom = (() => {
 })();
 
 const game = (() => {
-	const _player1 = Player(1, 'Player1', 'X', 0);
-	const _player2 = Player(2, 'Player2', 'O', 0);
-	let _activePlayer = _player1;
-	const _squares = Array(9).fill(null);
-	let _gameOver = false;
+	let _player1;
+	let _player2;
+	let _activePlayer;
+	let _squares;
+	let _gameOver;
 
 	function _changeActivePlayer() {
 		_activePlayer = _activePlayer === _player1 ? _player2 : _player1;
@@ -186,6 +186,11 @@ const game = (() => {
 	}
 
 	function init() {
+		_player1 = Player(1, 'Player1', 'X', 0);
+		_player2 = Player(2, 'Player2', 'O', 0);
+		_activePlayer = _player1;
+		_squares = Array(9).fill(null);
+		_gameOver = false;
 		dom.init(_player1, _player2, _activePlayer, _squares);
 	}
 
