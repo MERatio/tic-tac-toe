@@ -20,6 +20,7 @@ const dom = (() => {
 	const _player2NameAndScoreContainer = document.querySelector(
 		'.js-player2-name-and-score-container'
 	);
+	const _gameInfo = document.querySelector('.js-game-info');
 	const _activeMarker = document.querySelector('.js-active-marker');
 	const _squares = document.querySelector('.js-squares');
 
@@ -53,11 +54,6 @@ const dom = (() => {
 		}
 	}
 
-	function _renderScores(player1Score, player2Score) {
-		_player1Score.textContent = player1Score;
-		_player2Score.textContent = player2Score;
-	}
-
 	function _renderPlayerNames(player1Name, player2Name) {
 		_player1Name.textContent = player1Name;
 		_player2Name.textContent = player2Name;
@@ -80,14 +76,29 @@ const dom = (() => {
 		square.classList = _getSquareClassList(marker);
 	}
 
+	function renderGameInfo(text) {
+		_gameInfo.textContent = text;
+	}
+
+	function renderScores(player1Score, player2Score) {
+		_player1Score.textContent = player1Score;
+		_player2Score.textContent = player2Score;
+	}
+
 	function init(player1, player2, activePlayer, squares) {
 		_renderPlayerNames(player1.name, player2.name);
-		_renderScores(player1.score, player2.score);
+		renderScores(player1.score, player2.score);
 		changeActivePlayer(activePlayer);
 		_renderSquares(squares);
 	}
 
-	return { changeActivePlayer, updateSquare, init };
+	return {
+		changeActivePlayer,
+		updateSquare,
+		renderGameInfo,
+		renderScores,
+		init,
+	};
 })();
 
 const game = (() => {
@@ -95,10 +106,40 @@ const game = (() => {
 	const _player2 = Player(2, 'Player2', 'O', 0);
 	let _activePlayer = _player1;
 	const _squares = Array(9).fill(null);
+	let _gameOver = false;
 
 	function _changeActivePlayer() {
 		_activePlayer = _activePlayer === _player1 ? _player2 : _player1;
 		dom.changeActivePlayer(_activePlayer);
+	}
+
+	function _checkWinner(squares) {
+		const winningLines = [
+			[0, 1, 2],
+			[3, 4, 5],
+			[6, 7, 8],
+			[0, 3, 6],
+			[1, 4, 7],
+			[2, 5, 8],
+			[0, 4, 8],
+			[2, 4, 6],
+		];
+		for (const winningLine of winningLines) {
+			if (
+				squares[winningLine[0]] &&
+				squares[winningLine[0]] === squares[winningLine[1]] &&
+				squares[winningLine[0]] === squares[winningLine[2]]
+			) {
+				return 'yes';
+			}
+		}
+
+		const isAllSquaresTaken = squares.every((square) => square !== null);
+		if (isAllSquaresTaken) {
+			return 'tie';
+		}
+
+		return 'no one yet';
 	}
 
 	function getPlayerNumberBasedOnMarker(marker) {
@@ -108,12 +149,28 @@ const game = (() => {
 	}
 
 	function updateSquare(index) {
-		if (_squares[index]) {
+		if (_squares[index] || _gameOver) {
 			return;
 		}
+
 		_squares[index] = _activePlayer.marker;
 		dom.updateSquare(index, _activePlayer.marker);
-		_changeActivePlayer();
+
+		const isThereAWinner = _checkWinner(_squares);
+		switch (isThereAWinner) {
+			case 'yes':
+				_activePlayer.score++;
+				dom.renderScores(_player1.score, _player2.score);
+				dom.renderGameInfo(`${_activePlayer.name} wins!`);
+				_gameOver = true;
+				break;
+			case 'tie':
+				dom.renderGameInfo(`It's a tie!`);
+				_gameOver = true;
+				break;
+			default:
+				_changeActivePlayer();
+		}
 	}
 
 	function init() {
