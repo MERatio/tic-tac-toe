@@ -1,13 +1,19 @@
 'use strict';
 
-function Player(playerNumber, marker) {
+function Player(playerNumber, name, marker, score) {
 	return {
 		playerNumber,
+		name,
 		marker,
+		score,
 	};
 }
 
 const dom = (() => {
+	const _player1Name = document.querySelector('.js-player1-name');
+	const _player2Name = document.querySelector('.js-player2-name');
+	const _player1Score = document.querySelector('.js-player1-score');
+	const _player2Score = document.querySelector('.js-player2-score');
 	const _player1NameAndScoreContainer = document.querySelector(
 		'.js-player1-name-and-score-container'
 	);
@@ -47,6 +53,16 @@ const dom = (() => {
 		}
 	}
 
+	function _renderScores(player1Score, player2Score) {
+		_player1Score.textContent = player1Score;
+		_player2Score.textContent = player2Score;
+	}
+
+	function _renderPlayerNames(player1Name, player2Name) {
+		_player1Name.textContent = player1Name;
+		_player2Name.textContent = player2Name;
+	}
+
 	function changeActivePlayer(activePlayer) {
 		if (activePlayer.playerNumber === 1) {
 			_player2NameAndScoreContainer.classList.remove('active');
@@ -64,7 +80,9 @@ const dom = (() => {
 		square.classList = _getSquareClassList(marker);
 	}
 
-	function init(activePlayer, squares) {
+	function init(player1, player2, activePlayer, squares) {
+		_renderPlayerNames(player1.name, player2.name);
+		_renderScores(player1.score, player2.score);
 		changeActivePlayer(activePlayer);
 		_renderSquares(squares);
 	}
@@ -73,8 +91,8 @@ const dom = (() => {
 })();
 
 const game = (() => {
-	const _player1 = Player(1, 'X');
-	const _player2 = Player(2, 'O');
+	const _player1 = Player(1, 'Player1', 'X', 0);
+	const _player2 = Player(2, 'Player2', 'O', 0);
 	let _activePlayer = _player1;
 	const _squares = Array(9).fill(null);
 
@@ -99,7 +117,7 @@ const game = (() => {
 	}
 
 	function init() {
-		dom.init(_activePlayer, _squares);
+		dom.init(_player1, _player2, _activePlayer, _squares);
 	}
 
 	return {
