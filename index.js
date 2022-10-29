@@ -19,9 +19,6 @@ const dom = (() => {
 
 	function _handleSquareClick(event) {
 		const index = event.target.dataset.index;
-		if (game.isSquareTaken(index)) {
-			return;
-		}
 		game.updateSquare(index);
 	}
 
@@ -82,10 +79,6 @@ const game = (() => {
 		dom.changeActivePlayer(_activePlayer);
 	}
 
-	function isSquareTaken(index) {
-		return !!_squares[index];
-	}
-
 	function getPlayerNumberBasedOnMarker(marker) {
 		return _player1.marker === marker
 			? _player1.playerNumber
@@ -93,6 +86,9 @@ const game = (() => {
 	}
 
 	function updateSquare(index) {
+		if (_squares[index]) {
+			return;
+		}
 		_squares[index] = _activePlayer.marker;
 		dom.updateSquare(index, _activePlayer.marker);
 		_changeActivePlayer();
@@ -103,7 +99,6 @@ const game = (() => {
 	}
 
 	return {
-		isSquareTaken,
 		getPlayerNumberBasedOnMarker,
 		updateSquare,
 		init,
