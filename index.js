@@ -40,6 +40,13 @@ const dom = (() => {
 		return square;
 	}
 
+	function _renderSquares(squares) {
+		for (let i = 0; i < squares.length; i++) {
+			const square = _getSquare(squares[i], i);
+			_squares.appendChild(square);
+		}
+	}
+
 	function changeActivePlayer(activePlayer) {
 		if (activePlayer.playerNumber === 1) {
 			_player2NameAndScoreContainer.classList.remove('active');
@@ -57,14 +64,12 @@ const dom = (() => {
 		square.classList = _getSquareClassList(marker);
 	}
 
-	function renderSquares(squares) {
-		for (let i = 0; i < squares.length; i++) {
-			const square = _getSquare(squares[i], i);
-			_squares.appendChild(square);
-		}
+	function init(activePlayer, squares) {
+		changeActivePlayer(activePlayer);
+		_renderSquares(squares);
 	}
 
-	return { changeActivePlayer, updateSquare, renderSquares };
+	return { changeActivePlayer, updateSquare, init };
 })();
 
 const game = (() => {
@@ -95,7 +100,7 @@ const game = (() => {
 	}
 
 	function init() {
-		dom.renderSquares(_squares);
+		dom.init(_activePlayer, _squares);
 	}
 
 	return {
