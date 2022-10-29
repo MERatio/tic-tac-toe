@@ -23,6 +23,7 @@ const dom = (() => {
 	const _gameInfo = document.querySelector('.js-game-info');
 	let _activeMarker;
 	const _squares = document.querySelector('.js-squares');
+	const _restartGameBtn = document.querySelector('.js-restart-game-btn');
 
 	function _handleSquareClick(event) {
 		const index = event.target.dataset.index;
@@ -47,7 +48,16 @@ const dom = (() => {
 		return square;
 	}
 
+	function _clearSquares() {
+		while (_squares.firstChild) {
+			_squares.firstChild.removeEventListener('click', _handleSquareClick);
+			_squares.removeChild(_squares.firstChild);
+		}
+	}
+
 	function _renderSquares(squares) {
+		_clearSquares();
+
 		for (let i = 0; i < squares.length; i++) {
 			const square = _getSquare(squares[i], i);
 			_squares.appendChild(square);
@@ -78,6 +88,8 @@ const dom = (() => {
 
 	function renderGameInfo(initialContent, text = '') {
 		if (initialContent) {
+			_gameInfo.innerHTML = '';
+
 			const span = document.createElement('span');
 			span.classList.add('fw-700', 'js-active-marker');
 			_gameInfo.appendChild(span);
@@ -96,12 +108,19 @@ const dom = (() => {
 		_player2Score.textContent = player2Score;
 	}
 
+	function restart(activePlayer, squares) {
+		renderGameInfo(true);
+		changeActivePlayer(activePlayer);
+		_renderSquares(squares);
+	}
+
 	function init(player1, player2, activePlayer, squares) {
 		_renderPlayerNames(player1.name, player2.name);
 		renderScores(player1.score, player2.score);
 		renderGameInfo(true);
 		changeActivePlayer(activePlayer);
 		_renderSquares(squares);
+		_restartGameBtn.addEventListener('click', game.restart);
 	}
 
 	return {
@@ -109,6 +128,7 @@ const dom = (() => {
 		updateSquare,
 		renderGameInfo,
 		renderScores,
+		restart,
 		init,
 	};
 })();
@@ -185,6 +205,13 @@ const game = (() => {
 		}
 	}
 
+	function restart() {
+		_activePlayer = _player1;
+		_squares = Array(9).fill(null);
+		_gameOver = false;
+		dom.restart(_activePlayer, _squares);
+	}
+
 	function init() {
 		_player1 = Player(1, 'Player1', 'X', 0);
 		_player2 = Player(2, 'Player2', 'O', 0);
@@ -197,6 +224,7 @@ const game = (() => {
 	return {
 		getPlayerNumberBasedOnMarker,
 		updateSquare,
+		restart,
 		init,
 	};
 })();
