@@ -253,10 +253,12 @@ const game = (() => {
 	}
 
 	function init() {
-		_player1 = Player(1, 'Player1', 'X', 0);
+		const player1Name = prompt('Player1 name?', '') || 'Player1';
+		_player1 = Player(1, player1Name, 'X', 0);
 		switch (_mode) {
 			case 'vs-player':
-				_player2 = Player(2, 'Player2', 'O', 0);
+				const player2Name = prompt('Player2 name?', '') || 'Player2';
+				_player2 = Player(2, player2Name, 'O', 0);
 				break;
 			case 'vs-computer-easy':
 				_player2 = Player(2, 'Computer (easy)', 'O', 0);
