@@ -53,11 +53,11 @@ body {
 	margin-top: 2%;
 }
 
-.mode-select-group {
+.select-mode-group {
 	padding: 20px;
 }
 
-.mode-select {
+.select-mode {
 	max-width: max-content;
 	color: var(--neutral-700);
 	padding: 3px;

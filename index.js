@@ -10,6 +10,7 @@ function Player(playerNumber, name, marker, score) {
 }
 
 const dom = (() => {
+	const _modeSelect = document.querySelector('.js-select-mode');
 	const _player1Name = document.querySelector('.js-player1-name');
 	const _player2Name = document.querySelector('.js-player2-name');
 	const _player1Score = document.querySelector('.js-player1-score');
@@ -25,11 +26,6 @@ const dom = (() => {
 	const _squares = document.querySelector('.js-squares');
 	const _restartGameBtn = document.querySelector('.js-restart-game-btn');
 
-	function _handleSquareClick(event) {
-		const index = event.target.dataset.index;
-		game.updateSquare(index);
-	}
-
 	function _getSquareClassList(marker) {
 		let classes = 'square';
 		if (marker) {
@@ -44,13 +40,13 @@ const dom = (() => {
 		square.classList = _getSquareClassList(marker);
 		square.textContent = marker;
 		square.dataset.index = index;
-		square.addEventListener('click', _handleSquareClick);
+		square.addEventListener('click', game.handleSquareClick);
 		return square;
 	}
 
 	function _clearSquares() {
 		while (_squares.firstChild) {
-			_squares.firstChild.removeEventListener('click', _handleSquareClick);
+			_squares.firstChild.removeEventListener('click', game.handleSquareClick);
 			_squares.removeChild(_squares.firstChild);
 		}
 	}
@@ -115,6 +111,7 @@ const dom = (() => {
 	}
 
 	function init(player1, player2, activePlayer, squares) {
+		_modeSelect.addEventListener('change', game.handleSelectModeChange);
 		_renderPlayerNames(player1.name, player2.name);
 		renderScores(player1.score, player2.score);
 		renderGameInfo(true);
@@ -134,10 +131,13 @@ const dom = (() => {
 })();
 
 const game = (() => {
+	let _mode = 'vs-player';
 	let _player1;
 	let _player2;
 	let _activePlayer;
 	let _squares;
+	let _isComputerMakingAMove;
+	let _computerMoveTimeoutId;
 	let _gameOver;
 
 	function _changeActivePlayer() {
@@ -174,13 +174,7 @@ const game = (() => {
 		return 'no one yet';
 	}
 
-	function getPlayerNumberBasedOnMarker(marker) {
-		return _player1.marker === marker
-			? _player1.playerNumber
-			: _player2.playerNumber;
-	}
-
-	function updateSquare(index) {
+	function _updateSquare(index) {
 		if (_squares[index] || _gameOver) {
 			return;
 		}
@@ -205,25 +199,82 @@ const game = (() => {
 		}
 	}
 
+	function _makeComputerMove(difficulty) {
+		_isComputerMakingAMove = true;
+
+		let index;
+
+		switch (difficulty) {
+			case 'easy':
+				while (_squares[index] !== null) {
+					index = Math.floor(Math.random() * _squares.length + 1);
+				}
+				break;
+		}
+
+		_computerMoveTimeoutId = setTimeout(() => {
+			_updateSquare(index);
+			_isComputerMakingAMove = false;
+		}, 500);
+	}
+
+	function getPlayerNumberBasedOnMarker(marker) {
+		return _player1.marker === marker
+			? _player1.playerNumber
+			: _player2.playerNumber;
+	}
+
+	function handleSquareClick(event) {
+		const index = event.target.dataset.index;
+		if (_squares[index] || _isComputerMakingAMove) {
+			return;
+		}
+		_updateSquare(index);
+		if (!_gameOver) {
+			if (_mode === 'vs-computer-easy') {
+				_makeComputerMove('easy');
+			}
+		}
+	}
+
+	function handleSelectModeChange(event) {
+		_mode = event.target.value;
+		init();
+	}
+
 	function restart() {
 		_activePlayer = _player1;
 		_squares = Array(9).fill(null);
+		_isComputerMakingAMove = false;
+		clearTimeout(_computerMoveTimeoutId);
+		_computerMoveTimeoutId = undefined;
 		_gameOver = false;
 		dom.restart(_activePlayer, _squares);
 	}
 
 	function init() {
 		_player1 = Player(1, 'Player1', 'X', 0);
-		_player2 = Player(2, 'Player2', 'O', 0);
+		switch (_mode) {
+			case 'vs-player':
+				_player2 = Player(2, 'Player2', 'O', 0);
+				break;
+			case 'vs-computer-easy':
+				_player2 = Player(2, 'Computer (easy)', 'O', 0);
+				break;
+		}
 		_activePlayer = _player1;
 		_squares = Array(9).fill(null);
+		_isComputerMakingAMove = false;
+		clearTimeout(_computerMoveTimeoutId);
+		_computerMoveTimeoutId = undefined;
 		_gameOver = false;
 		dom.init(_player1, _player2, _activePlayer, _squares);
 	}
 
 	return {
 		getPlayerNumberBasedOnMarker,
-		updateSquare,
+		handleSquareClick,
+		handleSelectModeChange,
 		restart,
 		init,
 	};
