@@ -1,6 +1,8 @@
 :root {
 	--system-ui: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
 		'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+	--blue: #45aaf2;
+	--dark-blue: #0b64a4;
 }
 
 html {
@@ -8,8 +10,50 @@ html {
 	font-family: var(--system-ui);
 }
 
+body {
+	background-color: var(--blue);
+}
+
 *,
 *::before,
 *::after {
 	box-sizing: inherit;
+}
+
+.color-black {
+	color: #333;
+}
+
+.color-cloud {
+	color: #ecf0f1;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.container {
+	padding: 10px;
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.board {
+	background-color: var(--dark-blue);
+	width: 100%;
+	max-width: 350px;
+	aspect-ratio: 1 / 1;
+	display: grid;
+	grid-template-rows: repeat(3, 1fr);
+	grid-template-columns: repeat(3, 1fr);
+	gap: 8px;
+}
+
+.cell {
+	font-size: 4rem;
+	font-weight: 500;
+	border: none;
+	background-color: var(--blue);
 }

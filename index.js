@@ -20,7 +20,12 @@ const ticTacToe = (() => {
 		}
 
 		function resetBoard() {
-			board = createBoard(3, 3);
+			const testBoard = [
+				['X', 'O', null],
+				['X', 'X', null],
+				['O', null, 'O'],
+			];
+			board = testBoard || createBoard(3, 3);
 		}
 
 		function getBoard() {
@@ -43,12 +48,30 @@ const ticTacToe = (() => {
 	})();
 
 	const displayController = (() => {
-		function printBoard(board) {
-			const boardWithChangedNull = board.map((row) =>
-				row.map((cell) => cell || '|'),
-			);
-			for (const row of boardWithChangedNull) {
-				console.log(row.join(' '));
+		const containerDiv = document.getElementById('container');
+		const boardMain = document.getElementById('board');
+
+		function renderBoard(board) {
+			for (let i = 0; i < board.length; i++) {
+				for (let j = 0; j < board[i].length; j++) {
+					const cell = board[i][j];
+					const cellBtn = document.createElement('button');
+					cellBtn.setAttribute('type', 'button');
+					cellBtn.classList.add('cell');
+					if (cell) {
+						cellBtn.disabled = true;
+						cellBtn.textContent = cell;
+						if (cell === 'X') {
+							cellBtn.classList.add('color-black');
+						} else {
+							cellBtn.classList.add('color-cloud');
+						}
+					} else {
+						cellBtn.classList.add('cursor-pointer');
+						cellBtn.textContent = '';
+					}
+					boardMain.appendChild(cellBtn);
+				}
 			}
 		}
 
@@ -64,7 +87,7 @@ const ticTacToe = (() => {
 			console.log(str);
 		}
 
-		return { printBoard, printActivePlayer, printPlayAgain, log };
+		return { renderBoard, printActivePlayer, printPlayAgain, log };
 	})();
 
 	const gameController = (() => {
@@ -173,7 +196,7 @@ const ticTacToe = (() => {
 			} else {
 				const board = gameBoard.getBoard();
 				const winner = getWinner(board);
-				displayController.printBoard(board);
+				displayController.renderBoard(board);
 				if (winner === null) {
 					switchActivePlayer();
 					displayController.printActivePlayer(activePlayer);
@@ -198,7 +221,7 @@ const ticTacToe = (() => {
 			player2 = createPlayer('Player 2', 'O');
 			activePlayer = player1;
 			const board = gameBoard.getBoard();
-			displayController.printBoard(board);
+			displayController.renderBoard(board);
 			displayController.printActivePlayer(activePlayer);
 		}
 
