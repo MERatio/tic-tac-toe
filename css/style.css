@@ -42,6 +42,7 @@ body {
 }
 
 .announcement-text,
+.controls,
 .board {
 	width: 100%;
 	max-width: 350px;
@@ -60,19 +61,33 @@ body {
 
 .controls {
 	margin-top: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
+.mode-select,
 .restart-btn {
-	font-size: 1.4rem;
-	color: var(--dark-blue);
 	font-weight: 500;
-	padding: 8px 16px;
+	color: var(--dark-blue);
+	background-color: var(--color-cloud);
 	border: none;
 	border-radius: 2px;
 	box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5);
 	cursor: pointer;
 }
 
+.mode-select {
+	font-size: 1.1rem;
+	padding: 3px;
+}
+
+.restart-btn {
+	font-size: 1.4rem;
+	padding: 8px 16px;
+}
+
+.mode-select:hover,
 .restart-btn:hover {
 	background-color: #fff;
 }

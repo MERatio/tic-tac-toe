@@ -45,8 +45,14 @@ const ticTacToe = (() => {
 	const displayController = (() => {
 		const containerDiv = document.getElementById('container');
 		const announcementText = document.getElementById('announcementText');
+		const modeSelect = document.getElementById('modeSelect');
 		const restartBtn = document.getElementById('restartBtn');
 		const boardMain = document.getElementById('board');
+
+		function handleModeSelectChange(e) {
+			const [vs, difficulty] = e.currentTarget.value.split('-');
+			gameController.changeMode(vs, difficulty);
+		}
 
 		function handleRestartBtnClick() {
 			gameController.init();
@@ -62,6 +68,13 @@ const ticTacToe = (() => {
 			for (const cellBtn of cellBtns) {
 				cellBtn.removeEventListener('click', handleCellBtnClick);
 				cellBtn.remove();
+			}
+		}
+
+		function disableCellBtns() {
+			const cellBtns = Array.from(boardMain.children);
+			for (const cellBtn of cellBtns) {
+				cellBtn.disabled = true;
 			}
 		}
 
@@ -101,9 +114,11 @@ const ticTacToe = (() => {
 			announcementText.textContent = str;
 		}
 
+		modeSelect.addEventListener('change', handleModeSelectChange);
 		restartBtn.addEventListener('click', handleRestartBtnClick);
 
 		return {
+			disableCellBtns,
 			renderBoard,
 			announceActivePlayerText,
 			announceText,
@@ -111,6 +126,7 @@ const ticTacToe = (() => {
 	})();
 
 	const gameController = (() => {
+		let mode = { vs: 'computer', difficulty: 'easy' };
 		let gameOver;
 		let player1;
 		let player2;
@@ -202,6 +218,33 @@ const ticTacToe = (() => {
 			activePlayer = activePlayer === player1 ? player2 : player1;
 		}
 
+		function makeRandomComputerMove() {
+			const emptyCellCoor = [];
+			const board = gameBoard.getBoard();
+			for (let i = 0; i < board.length; i++) {
+				for (let j = 0; j < board[i].length; j++) {
+					if (board[i][j] === null) {
+						emptyCellCoor.push([i, j]);
+					}
+				}
+			}
+			const randomEmptyCellCoorIndex = Math.floor(
+				Math.random() * emptyCellCoor.length,
+			);
+			const [row, column] = emptyCellCoor[randomEmptyCellCoorIndex];
+			setTimeout(() => {
+				playRound(row, column);
+			}, 1000);
+		}
+
+		function makeComputerMove(difficulty) {
+			switch (difficulty) {
+				case 'easy':
+					makeRandomComputerMove();
+					break;
+			}
+		}
+
 		function playRound(row, column) {
 			if (gameOver) {
 				return;
@@ -219,6 +262,10 @@ const ticTacToe = (() => {
 				if (winner === null) {
 					switchActivePlayer();
 					displayController.announceActivePlayerText(activePlayer);
+					if (mode.vs === 'computer' && activePlayer === player2) {
+						displayController.disableCellBtns();
+						makeComputerMove(mode.difficulty);
+					}
 				} else if (winner === 'Tie') {
 					gameOver = true;
 					displayController.announceText("It's a tie!");
@@ -234,15 +281,25 @@ const ticTacToe = (() => {
 		function init() {
 			gameBoard.resetBoard();
 			gameOver = false;
-			player1 = createPlayer('Player 1', 'X');
-			player2 = createPlayer('Player 2', 'O');
+			if (mode.vs === 'computer') {
+				player1 = createPlayer('Player', 'X');
+				player2 = createPlayer(`Computer (${mode.difficulty})`, 'O');
+			} else {
+				player1 = createPlayer('Player 1', 'X');
+				player2 = createPlayer('Player 2', 'O');
+			}
 			activePlayer = player1;
 			const board = gameBoard.getBoard();
 			displayController.renderBoard(board);
 			displayController.announceActivePlayerText(activePlayer);
 		}
 
-		return { playRound, init };
+		function changeMode(vs, difficulty) {
+			mode = { vs, difficulty: difficulty === 'null' ? null : difficulty };
+			init();
+		}
+
+		return { playRound, init, changeMode };
 	})();
 
 	gameController.init();
