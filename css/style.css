@@ -3,6 +3,7 @@
 		'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 	--blue: #45aaf2;
 	--dark-blue: #0b64a4;
+	--color-cloud: #ecf0f1;
 }
 
 html {
@@ -25,7 +26,7 @@ body {
 }
 
 .color-cloud {
-	color: #ecf0f1;
+	color: var(--color-cloud);
 }
 
 .cursor-pointer {
@@ -36,14 +37,28 @@ body {
 	padding: 10px;
 	min-height: 100vh;
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
 	align-items: center;
+}
+
+.announcement-text,
+.board {
+	width: 100%;
+	max-width: 350px;
+}
+
+.announcement-text {
+	width: 100%;
+	font-size: 1.6rem;
+	font-weight: 500;
+	text-align: center;
+	padding: 20px 0px;
+	color: var(--color-cloud);
+	background-color: var(--dark-blue);
 }
 
 .board {
 	background-color: var(--dark-blue);
-	width: 100%;
-	max-width: 350px;
 	aspect-ratio: 1 / 1;
 	display: grid;
 	grid-template-rows: repeat(3, 1fr);

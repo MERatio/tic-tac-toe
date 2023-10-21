@@ -44,6 +44,7 @@ const ticTacToe = (() => {
 
 	const displayController = (() => {
 		const containerDiv = document.getElementById('container');
+		const announcementText = document.getElementById('announcementText');
 		const boardMain = document.getElementById('board');
 
 		function handleCellBtnClick(e) {
@@ -87,19 +88,19 @@ const ticTacToe = (() => {
 			}
 		}
 
-		function printActivePlayer(activePlayer) {
-			console.log(`${activePlayer.name} (${activePlayer.marker})'s  turn.`);
+		function announceActivePlayerText(activePlayer) {
+			announcementText.textContent = `${activePlayer.name} (${activePlayer.marker})'s  turn.`;
 		}
 
-		function printPlayAgain() {
-			console.log('Type `ticTacToe.init()` to play again.');
+		function announceText(str) {
+			announcementText.textContent = str;
 		}
 
-		function log(str) {
-			console.log(str);
-		}
-
-		return { renderBoard, printActivePlayer, printPlayAgain, log };
+		return {
+			renderBoard,
+			announceActivePlayerText,
+			announceText,
+		};
 	})();
 
 	const gameController = (() => {
@@ -196,32 +197,29 @@ const ticTacToe = (() => {
 
 		function playRound(row, column) {
 			if (gameOver) {
-				displayController.printPlayAgain();
 				return;
 			}
 
 			const markResult = gameBoard.mark(row, column, activePlayer.marker);
 			if (markResult === 1) {
-				displayController.log('Out of bounds.');
+				displayController.announceText('Out of bounds.');
 			} else if (markResult === 2) {
-				displayController.log('Cell is already taken.');
+				displayController.announceText('Cell is already taken.');
 			} else {
 				const board = gameBoard.getBoard();
 				const winner = getWinner(board);
 				displayController.renderBoard(board);
 				if (winner === null) {
 					switchActivePlayer();
-					displayController.printActivePlayer(activePlayer);
+					displayController.announceActivePlayerText(activePlayer);
 				} else if (winner === 'Tie') {
 					gameOver = true;
-					displayController.log("It's a tie!");
-					displayController.printPlayAgain();
+					displayController.announceText("It's a tie!");
 				} else {
 					gameOver = true;
-					displayController.log(
+					displayController.announceText(
 						`The winner is ${winner.name} (${winner.marker})!`,
 					);
-					displayController.printPlayAgain();
 				}
 			}
 		}
@@ -234,7 +232,7 @@ const ticTacToe = (() => {
 			activePlayer = player1;
 			const board = gameBoard.getBoard();
 			displayController.renderBoard(board);
-			displayController.printActivePlayer(activePlayer);
+			displayController.announceActivePlayerText(activePlayer);
 		}
 
 		return { playRound, init };
