@@ -20,12 +20,7 @@ const ticTacToe = (() => {
 		}
 
 		function resetBoard() {
-			const testBoard = [
-				['X', 'O', null],
-				['X', 'X', null],
-				['O', null, 'O'],
-			];
-			board = testBoard || createBoard(3, 3);
+			board = createBoard(3, 3);
 		}
 
 		function getBoard() {
@@ -51,7 +46,21 @@ const ticTacToe = (() => {
 		const containerDiv = document.getElementById('container');
 		const boardMain = document.getElementById('board');
 
+		function handleCellBtnClick(e) {
+			const { row, column } = e.currentTarget.dataset;
+			gameController.playRound(row, column);
+		}
+
+		function clearBoardMain() {
+			const cellBtns = Array.from(boardMain.children);
+			for (const cellBtn of cellBtns) {
+				cellBtn.removeEventListener('click', handleCellBtnClick);
+				cellBtn.remove();
+			}
+		}
+
 		function renderBoard(board) {
+			clearBoardMain();
 			for (let i = 0; i < board.length; i++) {
 				for (let j = 0; j < board[i].length; j++) {
 					const cell = board[i][j];
@@ -68,7 +77,10 @@ const ticTacToe = (() => {
 						}
 					} else {
 						cellBtn.classList.add('cursor-pointer');
+						cellBtn.dataset.row = i;
+						cellBtn.dataset.column = j;
 						cellBtn.textContent = '';
+						cellBtn.addEventListener('click', handleCellBtnClick);
 					}
 					boardMain.appendChild(cellBtn);
 				}
@@ -228,10 +240,5 @@ const ticTacToe = (() => {
 		return { playRound, init };
 	})();
 
-	return {
-		playRound: gameController.playRound,
-		init: gameController.init,
-	};
+	gameController.init();
 })();
-
-ticTacToe.init();
