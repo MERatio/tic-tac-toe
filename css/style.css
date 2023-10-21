@@ -55,11 +55,36 @@ body {
 	padding: 20px 0px;
 	color: var(--color-cloud);
 	background-color: var(--dark-blue);
+	margin: 0;
+}
+
+.controls {
+	margin-top: 10px;
+}
+
+.restart-btn {
+	font-size: 1.4rem;
+	color: var(--dark-blue);
+	font-weight: 500;
+	padding: 8px 16px;
+	border: none;
+	border-radius: 2px;
+	box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5);
+	cursor: pointer;
+}
+
+.restart-btn:hover {
+	background-color: #fff;
+}
+
+.restart-btn:active {
+	box-shadow: none;
 }
 
 .board {
 	background-color: var(--dark-blue);
 	aspect-ratio: 1 / 1;
+	margin-top: 30px;
 	display: grid;
 	grid-template-rows: repeat(3, 1fr);
 	grid-template-columns: repeat(3, 1fr);

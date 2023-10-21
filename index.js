@@ -45,7 +45,12 @@ const ticTacToe = (() => {
 	const displayController = (() => {
 		const containerDiv = document.getElementById('container');
 		const announcementText = document.getElementById('announcementText');
+		const restartBtn = document.getElementById('restartBtn');
 		const boardMain = document.getElementById('board');
+
+		function handleRestartBtnClick() {
+			gameController.init();
+		}
 
 		function handleCellBtnClick(e) {
 			const { row, column } = e.currentTarget.dataset;
@@ -95,6 +100,8 @@ const ticTacToe = (() => {
 		function announceText(str) {
 			announcementText.textContent = str;
 		}
+
+		restartBtn.addEventListener('click', handleRestartBtnClick);
 
 		return {
 			renderBoard,
